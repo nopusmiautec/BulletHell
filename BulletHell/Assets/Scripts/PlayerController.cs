@@ -1,5 +1,8 @@
 using UnityEngine;
-
+/// <summary>
+/// Controls the player movement, shooting mecanics, and screen boundary restrictions.
+/// Handles normal/slow movement speed and bullet firing.
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     public float normalSpeed = 800f;
@@ -12,13 +15,18 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     public Transform firePos;
     private float xMAX, xMIN, yMAX, yMIN;
-
+    /// <summary>
+    /// Initializes components and calculates screen boundaries based on the camera view.
+    /// </summary>
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         CalculateScreenBounds();
     }
-
+    /// <summary>
+    /// Calculates the screen boundaries using the main camera and player sprite size.
+    /// These values are used to clamp the player's position.
+    /// </summary>
     void CalculateScreenBounds()
     {
         var camera = Camera.main;
@@ -33,7 +41,10 @@ public class PlayerController : MonoBehaviour
         xMIN = cameraPos.x - wCamera + spriteSize;
         xMAX = cameraPos.x + wCamera - spriteSize;
     }
-
+    /// <summary>
+    /// Handles player input for movement and shooting each frame.
+    /// Manages fire cooldown and detects the shooting key: Z
+    /// </summary>
     void Update()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
@@ -48,7 +59,9 @@ public class PlayerController : MonoBehaviour
             fireCooldown = fireRate;
         }
     }
-
+    /// <summary>
+    /// Applies movement physics and keeps the player within screen limits.
+    /// </summary>
     void FixedUpdate()
     {
         float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? slowSpeed : normalSpeed;
@@ -56,7 +69,10 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = newVelocity;
         LimitPositionToScreen();
     }
-
+    /// <summary>
+    /// Prevents the player from moveing outside the visible camera bounds.
+    /// Clamps the position and cancels velocity if the player collides with a boundary.
+    /// </summary>
     void LimitPositionToScreen()
     {
         Vector3 clampedPosition = transform.position;
@@ -69,7 +85,9 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = Vector2.zero; // Detener movimiento al chocar con límite
         } 
     }
-
+    /// <summary>
+    /// Instantiates a bullet prefab at firePos and sets its direction upwards.
+    /// </summary>
     void Shoot()
     {
         GameObject bullet = Instantiate(pBullet, firePos.position, Quaternion.identity);

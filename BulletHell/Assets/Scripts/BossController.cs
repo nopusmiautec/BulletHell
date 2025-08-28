@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Controls the boss attack patterns and manages bullet firing logic.
+/// The boss alternates between circular, spiral, and side wave bullet patterns.
+/// </summary>
 public class BossController : MonoBehaviour
 {
     public GameObject Bullet;
@@ -14,6 +18,9 @@ public class BossController : MonoBehaviour
 
     private float spiralAngle = 0f;
     private Transform player;
+    /// <summary>
+    /// Initializes the boss by finding the player and setting the initial fire rate.
+    /// </summary>
     void Start()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -22,6 +29,9 @@ public class BossController : MonoBehaviour
 
         SetFireRateByPattern();
     }
+    /// <summary>
+    /// Updates timers, switches patterns, and fires bullets when ready.
+    /// </summary>
     void Update()
     {
         patternTimer += Time.deltaTime;
@@ -50,7 +60,9 @@ public class BossController : MonoBehaviour
             }
         }
     }
-
+/// <summary>
+/// Sets the firing rate based on the current attack pattern.
+/// </summary>
     void SetFireRateByPattern()
     {
         if (currentPattern == 0)
@@ -62,7 +74,9 @@ public class BossController : MonoBehaviour
         else
             fireRate = 0.2f;
     }
-
+/// <summary>
+/// Fires bullets outward in a circular pattern.
+/// </summary>
     void FireCircularPattern()
     {
         int bulletCount = 20;
@@ -79,7 +93,9 @@ public class BossController : MonoBehaviour
             b.speed = 300f;
         }
     }
-
+/// <summary>
+/// Fires bullets in a spiral pattern, incrementing the angle each shot.
+/// </summary>
     void FireSpiralPattern()
     {
         spiralAngle += 15f;
@@ -91,7 +107,9 @@ public class BossController : MonoBehaviour
         b.SetDirection(dir);
         b.speed = 700f;
     }
-
+/// <summary>
+/// Fires two bullets from the left and right points, directed at the player.
+/// </summary>
     void FireSideWavesPattern()
     {
         if (player == null) return;

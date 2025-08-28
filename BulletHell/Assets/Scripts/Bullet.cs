@@ -1,5 +1,8 @@
 using UnityEngine;
-
+/// <summary>
+/// Represents a bullet projectile in the game.
+/// Handles its movement, lifetime, and interaction with the BulletManager.
+/// </summary>
 public class Bullet : MonoBehaviour
 {
     public float speed = 5f;
@@ -9,13 +12,19 @@ public class Bullet : MonoBehaviour
     {
         direction = dir.normalized;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    /// <summary>
+    /// Called when the bullet is first created.
+    /// Registers the bullet in the BulletManager.
+    /// </summary>
     void Start()
     {
         BulletManager.Instance.AddBullet();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Called once per frame.
+    /// Moves the bullet in its set direction and destroys it if it leaves the camera viewport.
+    /// </summary>
     void Update()
     {
         transform.Translate(direction * speed * Time.deltaTime);
@@ -27,7 +36,10 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    /// <summary>
+    /// Called when the bullet is destroyed.
+    /// Unregisters the bullet from the BulletManager.
+    /// </summary>
     private void OnDestroy()
     {
         if (BulletManager.Instance != null)
