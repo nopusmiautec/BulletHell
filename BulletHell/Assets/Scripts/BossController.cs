@@ -13,8 +13,13 @@ public class BossController : MonoBehaviour
     private int currentPattern = 0; // 0 = circular, 1 = espiral, 2 = oleadas
 
     private float spiralAngle = 0f;
+    private Transform player;
     void Start()
     {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+            player = playerObj.transform;
+
         SetFireRateByPattern();
     }
     void Update()
@@ -50,6 +55,10 @@ public class BossController : MonoBehaviour
     {
         if (currentPattern == 0)
             fireRate = 1.5f;
+
+        else if (currentPattern == 2)
+            fireRate = 0.5f;
+        
         else
             fireRate = 0.2f;
     }
@@ -85,16 +94,19 @@ public class BossController : MonoBehaviour
 
     void FireSideWavesPattern()
     {
-        Vector2 down = Vector2.down;
+        if (player == null) return;
+
+        Vector2 dirLeft = (player.position - bulletLeft.position).normalized;
+        Vector2 dirRight = (player.position - bulletRight.position).normalized;
 
         GameObject bulletL = Instantiate(Bullet, bulletLeft.position, Quaternion.identity);
         Bullet bL = bulletL.GetComponent<Bullet>();
-        bL.SetDirection(down);
+        bL.SetDirection(dirLeft);
         bL.speed = 500f;
 
         GameObject bulletR = Instantiate(Bullet, bulletRight.position, Quaternion.identity);
         Bullet bR = bulletR.GetComponent<Bullet>();
-        bR.SetDirection(down);
+        bR.SetDirection(dirRight);
         bR.speed = 500f;
     }
 }
